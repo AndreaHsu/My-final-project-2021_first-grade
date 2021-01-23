@@ -112,7 +112,7 @@ void game_init(void) {
         game_abort("failed to load audio: music_1.mp3");
     song = main_bgm;
     if (!al_play_sample(song, 1, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, &song_id))
-        game_abort("??failed to play audio (bgm)???"), game_log("0099failed to play audio (bgm)");
+        game_abort("failed to play audio (bgm)"), game_log("failed to play audio (bgm)");
     
     img_settings = al_load_bitmap("settings.png");
     if (!img_settings)
@@ -315,7 +315,6 @@ void game_update(void) {
         // 1) For each bullets, if it's not hidden, update x, y
         // according to vx, vy.
         // 2) If the bullet is out of the screen, hide it.
-        // Uncomment and fill in the code below.
         int i;
         for (int i = 0; i < MAX_BULLET;i++) {
             if (bullets[i].hidden)
@@ -477,7 +476,7 @@ void game_update(void) {
                     enemy_2_bullets[i].vx = 7 - i;
                     if (i == 0)
                         if (!al_play_sample(shoot_bgm_enemy_2, 1, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, &shoot_bgm_id_enemy_2))
-                            game_abort("failed to play audio (bgm)2222");
+                            game_abort("failed to play audio (bgm)");
                 }
             }
         }
@@ -491,7 +490,7 @@ void game_update(void) {
                 rockets[i].x = plane.x;
                 rockets[i].y = plane.y - plane.h / 2;
                 if (!al_play_sample(shoot_bgm_enemy_2, 1, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, &shoot_bgm_id_enemy_2))
-                    game_abort("failed to play audio (bgm)331111");
+                    game_abort("failed to play audio (bgm)");
             }
         }
         
@@ -716,7 +715,7 @@ void game_draw(void) {
 
 void game_destroy(void) {
     // Destroy your bullet image.
-    //al_destroy_bitmap(img_bullet_0);> <
+    al_destroy_bitmap(img_bullet_0);
     al_destroy_bitmap(img_bullet_1);
     al_destroy_bitmap(img_bullet_2);
     al_destroy_bitmap(img_bullet_bag);
@@ -743,29 +742,28 @@ void game_destroy(void) {
     al_destroy_bitmap(start_img_enemy);
     al_destroy_bitmap(start_img_enemy_2);
     al_destroy_sample(start_bgm);
+
     /* Night Scene resources*/
     al_destroy_bitmap(night_img_background);
     al_destroy_sample(night_bgm);
     al_destroy_bitmap(store_img_background);
     al_destroy_sample(ending_bgm);
     al_destroy_sample(breakrecord_bgm);
-    //al_destroy_sample(over_bgm);> <
-    //al_destroy_sample(song);> <
-    //music
-    //al_destroy_bitmap(music_1);
-    //al_destroy_bitmap(music_2);
-    // [HACKATHON 2-10]
-    // TODO: Destroy your bullet image.
-    // Uncomment and fill in the code below.
-    //al_destroy_bitmap(img_bullet);
-    //al_destroy_bitmap(img_bullet_enemy_2);> <
-    //al_destroy_sample(shoot_bgm);
-    //al_destroy_sample(shoot_bgm_enemy_2);
-    //al_destroy_sample(buy);
+    al_destroy_sample(over_bgm);
+    al_destroy_sample(song);
 
-    //al_destroy_timer(game_update_timer);
-    //al_destroy_event_queue(game_event_queue);
-    //al_destroy_display(game_display);
+    /* Store Scene resources*/
+    al_destroy_bitmap(music_1);
+    al_destroy_bitmap(music_2);
+    al_destroy_bitmap(img_bullet);
+    al_destroy_bitmap(img_bullet_enemy_2);
+    al_destroy_sample(shoot_bgm);
+    al_destroy_sample(shoot_bgm_enemy_2);
+    al_destroy_sample(buy);
+
+    al_destroy_timer(game_update_timer);
+    al_destroy_event_queue(game_event_queue);
+    al_destroy_display(game_display);
     free(mouse_state);
 }
 
@@ -846,12 +844,12 @@ void game_change_scene(int next_scene) {
             highscore = score;
             ending_bgm = breakrecord_bgm;
             if (!al_play_sample(ending_bgm, sound, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, &ending_bgm_id))
-                game_abort("??failed to play audio (bgm)???"), game_log("0099failed to play audio (bgm)");
+                game_abort("failed to play audio (bgm)"), game_log("failed to play audio (bgm)");
         }
         else {
             ending_bgm = over_bgm;
             if (!al_play_sample(ending_bgm, sound, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, &ending_bgm_id))
-                game_abort("??failed to play audio (bgm)???"), game_log("0099failed to play audio (bgm)");
+                game_abort("failed to play audio (bgm)"), game_log("failed to play audio (bgm)");
         }
     }
 }
@@ -912,14 +910,14 @@ void on_mouse_down(int btn, int x, int y) {
                 song = main_bgm;
                 song_id = main_bgm_id;
                 if (!al_play_sample(song, 1, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, &song_id))
-                    game_abort("??failed to play audio (bgm)"), game_log("0099failed to play audio (bgm)");
+                    game_abort("failed to play audio (bgm)"), game_log("failed to play audio (bgm)");
             }
             else if (pnt_in_rect(x, y, 300, 150, 40, 40)) {
                 al_stop_sample(&song_id);
                 song = start_bgm;
                 song_id = start_bgm_id;
                 if (!al_play_sample(song, 1, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, &song_id))
-                    game_abort("??failed to play audio (bgm)???"), game_log("0099failed to play audio (bgm)");
+                    game_abort("failed to play audio (bgm)"), game_log("failed to play audio (bgm)");
             }
             else if (pnt_in_rect(x, y, 500, 150, 40, 40)) {
                 al_stop_sample(&song_id);
@@ -932,17 +930,17 @@ void on_mouse_down(int btn, int x, int y) {
             if (pnt_in_rect(mouse_x, mouse_y, 100, 350, 50, 50)) {
                 start_img_plane = ghost1;
                 if (!al_play_sample(select_bgm, 1, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, &select_bgm_id))
-                    game_abort("??failed to play audio (bgm)???"), game_log("0099failed to play audio (bgm)");
+                    game_abort("failed to play audio (bgm)"), game_log("failed to play audio (bgm)");
             }
             else if (pnt_in_rect(mouse_x, mouse_y, 300, 350, 40, 40)) {
                 start_img_plane = ghost2;
                 if (!al_play_sample(select_bgm, 1, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, &select_bgm_id))
-                    game_abort("??failed to play audio (bgm)???"), game_log("0099failed to play audio (bgm)");
+                    game_abort("failed to play audio (bgm)"), game_log("failed to play audio (bgm)");
             }
             else if (pnt_in_rect(mouse_x, mouse_y, 500, 350, 40, 40)) {
                 start_img_plane = ghost3;
                 if (!al_play_sample(select_bgm, 1, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, &select_bgm_id))
-                    game_abort("??failed to play audio (bgm)???"), game_log("0099failed to play audio (bgm)");
+                    game_abort("failed to play audio (bgm)"), game_log("failed to play audio (bgm)");
             }
         }
     }
@@ -951,19 +949,19 @@ void on_mouse_down(int btn, int x, int y) {
             //buy
             if (pnt_in_rect(x, y, 100, 150, 30, 30) && hav[1]==0 && money-30 >=0) {
                 if (!al_play_sample(buy, 1, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, &buy_id))
-                    game_abort("??failed to play audio (bgm)"), game_log("0099failed to play audio (bgm)");
+                    game_abort("failed to play audio (bgm)"), game_log("failed to play audio (bgm)");
                 hav[1] = true;
                 money -= 30;
             }
             else if (pnt_in_rect(x, y, 320, 150, 20, 30) && hav[2] == 0 && money - 20 >= 0) {
                 if (!al_play_sample(buy, 1, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, &buy_id))
-                    game_abort("??failed to play audio (bgm)???"), game_log("0099failed to play audio (bgm)");
+                    game_abort("failed to play audio (bgm)"), game_log("failed to play audio (bgm)");
                 hav[2] = true;
                 money -= 20;
             }
             else if (pnt_in_rect(x, y, 550, 150, 30, 30) && hav[3] == 0  && money - 20 >= 0) {
                 if (!al_play_sample(buy, 1, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, &buy_id))
-                    game_abort("??failed to play audio (bgm)???"), game_log("0099failed to play audio (bgm)");
+                    game_abort("failed to play audio (bgm)"), game_log("failed to play audio (bgm)");
                 hav[3] = true;
                 money -= 20;
             }
@@ -982,7 +980,7 @@ void on_mouse_down(int btn, int x, int y) {
                         MAX_COOLDOWN = temp2;
                         img_bullet = img_bullet_bag;
                         if (!al_play_sample(select_bgm, 1, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, &select_bgm_id))
-                            game_abort("??failed to play audio (bgm)???"), game_log("0099failed to play audio (bgm)");
+                            game_abort("failed to play audio (bgm)"), game_log("failed to play audio (bgm)");
                     }
                     j++;
                 }
@@ -1007,10 +1005,7 @@ ALLEGRO_BITMAP *load_bitmap_resized(const char *filename, int w, int h) {
     if (!resized_bmp)
         game_abort("failed to create bitmap when creating resized image: %s", filename);
     al_set_target_bitmap(resized_bmp);
-    al_draw_scaled_bitmap(loaded_bmp, 0, 0,
-        al_get_bitmap_width(loaded_bmp),
-        al_get_bitmap_height(loaded_bmp),
-        0, 0, w, h, 0);
+    al_draw_scaled_bitmap(loaded_bmp, 0, 0,al_get_bitmap_width(loaded_bmp),al_get_bitmap_height(loaded_bmp),0, 0, w, h, 0);
     al_set_target_bitmap(prev_target);
     al_destroy_bitmap(loaded_bmp);
 
